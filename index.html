@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Ngrok Public URL</title>
+    <script>
+        // Function to fetch the ngrok URL directly from the API
+        function getNgrokLink() {
+            const apiKey = "22eVuxFOjz9uLpY4xTdjiQCwZ05_49UEzD2TfLECqMP3Cssxv"; // Replace with your ngrok API key
+            const url = "https://api.ngrok.com/tunnel_sessions";  // ngrok API endpoint
+            const headers = {
+                "Authorization": `Bearer ${apiKey}`,
+                "Ngrok-Version": "2"
+            };
+
+            // Fetch the ngrok public URL from the API
+            fetch(url, { headers })
+                .then(response => response.json())
+                .then(data => {
+                    // Get the public URL of the first tunnel (if available)
+                    const publicUrl = data.tunnels[0]?.public_url;
+                    if (publicUrl) {
+                        document.getElementById('ngrokUrl').value = publicUrl; // Display the URL in the input box
+                    } else {
+                        alert("No active ngrok tunnels found.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching ngrok URL:", error);
+                    alert("There was an error fetching the ngrok URL.");
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Get Ngrok Public URL</h1>
+
+    <!-- Button to fetch the ngrok link -->
+    <button onclick="getNgrokLink()">Get Ngrok Link</button>
+
+    <br><br>
+    <label for="ngrokUrl">Ngrok Public URL:</label>
+    <input type="text" id="ngrokUrl" readonly style="width: 300px;">
+</body>
+</html>
